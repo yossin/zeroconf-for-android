@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Implementation-Title: Apache OpenEJB
+Implementation-Version: 3.1.4
+Tool: Bnd-0.0.357
+Bundle-Name: Apache OpenEJB :: Assembly :: Tomcat :: Webapp
+Created-By: 1.6.0_20 (Apple Inc.)
+Bundle-Vendor: The Apache OpenEJB development community
+Bundle-Version: 3.1.4
+Bnd-LastModified: 1289607055497
+Bundle-ManifestVersion: 2
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-Description: Apache OpenEJB is an open source, modular, configu
+ rable and extendable EJB Container System and EJB Server.
+Bundle-SymbolicName: org.apache.openejb.tomcat-webapp
+Bundle-DocURL: http://openejb.apache.org
+

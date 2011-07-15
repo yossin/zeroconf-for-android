@@ -1,0 +1,65 @@
+catalina-6.0.29.jar
+ annotations-api-6.0.29.jar
+ juli-6.0.29.jar
+ servlet-api-6.0.29.jar
+geronimo-javamail_1.4_mail-1.8.2.jar
+javaee-api-5.0-3.jar
+openejb-client-3.1.4.jar
+openejb-core-3.1.4.jar
+ activemq-core-5.3.1.jar
+  activeio-core-3.1.2.jar
+   geronimo-j2ee-management_1.1_spec-1.0.1.jar
+  activemq-protobuf-1.0.jar
+  commons-logging-api-1.1.jar
+  commons-net-2.0.jar
+  kahadb-5.3.1.jar
+ activemq-ra-5.3.1.jar
+ commons-cli-1.1.jar
+ commons-dbcp-all-1.3-r699049.jar
+ commons-logging-1.1.jar
+ ejb31-api-experimental-3.1.4.jar
+ geronimo-connector-2.1.jar
+ geronimo-transaction-2.1.jar
+ howl-1.0.1-1.jar
+ hsqldb-1.8.0.7.jar
+ log4j-1.2.12.jar
+ openejb-api-3.1.4.jar
+ openejb-javaagent-3.1.4.jar
+ openejb-jee-3.1.4.jar
+  jaxb-impl-2.1.9.jar
+  wstx-asl-3.2.0.jar
+   stax-api-1.0.1.jar
+ openjpa-1.2.1.jar
+  commons-collections-3.2.jar
+  commons-lang-2.1.jar
+  commons-pool-1.3.jar
+  serp-1.13.1.jar
+ quartz-1.5.2.jar
+ wsdl4j-1.6.1.jar
+ xbean-asm-shaded-3.7.jar
+ xbean-finder-shaded-3.7.jar
+ xbean-naming-3.7.jar
+ xbean-reflect-3.7.jar
+openejb-cxf-3.1.4.jar
+ cxf-bundle-2.2.10.jar
+  XmlSchema-1.4.5.jar
+  bcprov-jdk15-1.43.jar
+  neethi-2.0.4.jar
+  saaj-impl-1.3.2.jar
+  serializer-2.7.1.jar
+  wss4j-1.5.8.jar
+  xmlsec-1.4.3.jar
+ xml-resolver-1.2.jar
+openejb-ejbd-3.1.4.jar
+openejb-hsql-3.1.4.jar
+openejb-http-3.1.4.jar
+openejb-server-3.1.4.jar
+openejb-telnet-3.1.4.jar
+openejb-tomcat-catalina-3.1.4.jar
+openejb-tomcat-common-3.1.4.jar
+ openejb-webapp-common-3.1.4.jar
+  openejb-multicast-3.1.4.jar
+openejb-tomcat-loader-3.1.4.jar
+ openejb-loader-3.1.4.jar
+openejb-webservices-3.1.4.jar
+swizzle-stream-1.0.1.jar
