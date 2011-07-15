@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Context>
+<!--           
+
+url="jdbc:hsqldb:file:${user.home}/db/jmdns;shutdown=true"
+jdbc:hsqldb:hsql://localhost/
+"jdbc:hsqldb:file:D:/temp/hsqldb/jmdns/db_file;shutdown="
+ -->
+  <Resource name="jdbc/jmdnsDB" auth="Container"
+            type="org.hsqldb.jdbcDriver" username="sa" password=""
+            driverClassName="org.hsql.jdbcDriver" 
+            url="jdbc:hsqldb:hsql://localhost/jmdns_db"
+            maxActive="8" maxIdle="4"/>
+
+</Context>
