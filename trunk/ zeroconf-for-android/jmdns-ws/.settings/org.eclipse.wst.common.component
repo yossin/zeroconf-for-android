@@ -6,6 +6,9 @@
         <dependent-module archiveName="jmdns-ejb.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/jmdns-ejb/jmdns-ejb">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="jackson-all-1.8.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/shared-lib/json/jackson-all-1.8.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="context-root" value="jmdns-ws"/>
         <property name="java-output-path" value="/jmdns-ws/build/classes"/>
     </wb-module>
