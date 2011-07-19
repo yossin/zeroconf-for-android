@@ -13,21 +13,20 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 @Entity
-public class Place  implements Serializable {
+public class Zone  implements Serializable {
 
 	private static final long serialVersionUID = 6345655593639832657L;
 	@Id @Column(nullable=false)
     private String name;
 	@Embedded
     private Location location;
-    //, mappedBy="place",
-	@OneToMany(fetch=FetchType.EAGER,cascade=CascadeType.ALL, orphanRemoval=true, mappedBy="place")
+	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.REFRESH, mappedBy="zone", orphanRemoval=false)
     private Set<Lamp> lamps;
     
-    public Place(){
+    public Zone(){
     }
     
-    public Place(String name, Location location) {
+    public Zone(String name, Location location) {
 		this.name = name;
 		this.location =location;
 	}
@@ -57,11 +56,10 @@ public class Place  implements Serializable {
 	}
 	
 	public void addLamp(Lamp lamp){
-		lamp.setPlace(this);
+		lamp.setZone(this);
 		if (lamps == null) lamps = new HashSet<Lamp>();
 		lamps.add(lamp);
 	}
-	
 
     
 }

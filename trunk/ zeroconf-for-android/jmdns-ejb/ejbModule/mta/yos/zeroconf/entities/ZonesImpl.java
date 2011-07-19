@@ -8,33 +8,37 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
 import javax.persistence.Query;
 
-@Stateless(name = "Places")
-public class PlacesImpl implements Places {
+@Stateless(name = "Zones")
+public class ZonesImpl implements Zones {
 	@PersistenceContext(unitName = "jmdns-ws-jpa")
 	private EntityManager entityManager;
 
 
 	@Override
-    public Place find(String key) throws Exception {
-    	return entityManager.find(Place.class, key);
+    public Zone find(String key) throws Exception {
+    	return entityManager.find(Zone.class, key);
     }
 	@Override
-	public void save(Place entity) throws Exception{
-		entityManager.persist(entity);
+	public void save(Zone entity) throws Exception{
+		if (entityManager.contains(entity)){
+			entityManager.refresh(entity);
+		}else {
+			entityManager.persist(entity);
+		}
 		entityManager.flush();
 //		entityManager.close();
 	}
 	@Override
-	public void delete(Place entity) throws Exception {
+	public void delete(Zone entity) throws Exception {
 		entityManager.remove(entity);
 	}
 	@Override
-	public List<Place> listAll() throws Exception{
-    	String q="SELECT o from Place as o";
+	public List<Zone> listAll() throws Exception{
+    	String q="SELECT o from Zone as o";
         return query(q);
 	}
 
-	public List<Place> query(String statement) throws Exception{
+	public List<Zone> query(String statement) throws Exception{
         Query query = entityManager.createQuery(statement);
         return query.getResultList();
 	}
