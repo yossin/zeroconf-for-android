@@ -17,10 +17,12 @@ import m2m.test2.Parent;
 import m2m.test2.ParentPk;
 import m2m.test2.Parents;
 import mta.yos.zeroconf.entities.Lamp;
+import mta.yos.zeroconf.entities.Lamps;
 import mta.yos.zeroconf.entities.Location;
-import mta.yos.zeroconf.entities.Place;
-import mta.yos.zeroconf.entities.Places;
+import mta.yos.zeroconf.entities.Zone;
+import mta.yos.zeroconf.entities.Zones;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.superbiz.calculator.CalculatorLocal;
 
 /**
@@ -29,7 +31,9 @@ import org.superbiz.calculator.CalculatorLocal;
 public class Test1 extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     @EJB
-    private Places places;
+    private Zones zones;
+    @EJB
+    private Lamps lamps;
     
     @EJB
     private CalculatorLocal calculator;
@@ -37,30 +41,80 @@ public class Test1 extends HttpServlet {
     @EJB
     private Parents parents;
     
+	ObjectMapper mapper = new ObjectMapper(); // can reuse, share globally
+    
+    private void toJason() throws Exception{
+    	List<Zone> list = zones.listAll();
+    	//ArrayIn
+    	
+    	String res = mapper.writeValueAsString(list);
+    	System.out.println(res);
+    }
+    
+    
     private void testPlaces2(ServletRequest request) throws Exception{    	
-		String placeName = request.getParameter("name");
+    	String placeName = request.getParameter("name");
 		String name = placeName==null?"place":placeName;
+		
+		listZones();
+		addZone(name);
+		listZones();
+		//addToDefZone(name);
+        
+		
+    	//listZones();
+        
+    }
+    
+    private void addZone(String name) throws Exception{
     	
     	int loc= (int)(Math.random()*100);
-        Place place1 = new Place(name, new Location(loc, loc));
-        for (int i=1; i<=2;i++){
-            Lamp lamp = new Lamp("Lamp-"+i,Math.random()>0);
-        	lamp.setPlace(place1);
-        	place1.addLamp(lamp);
+        Zone zone1 = zones.find(name);
+        if (zone1 == null) {
+        	zone1= new Zone(name, new Location(loc, loc));
+            zones.save(zone1);
         }
-        places.save(place1);
         
-        List<Place> list = places.listAll();
+        for (int i=1; i<=2;i++){
+        	String lampName="Lamp-"+i;
+            Lamp lamp = new Lamp(lampName+"["+name+"]",lampName,Math.random()>0);
+        	lamp.setZone(zone1);
+        	lamps.save(lamp);
+        }
+    }
+    private void addToDefZone(String name) throws Exception{
+    	
+    	int loc= (int)(Math.random()*100);
+        Zone zone1 = zones.find(name);
+        if (zone1 == null) {
+        	return;
+        }
+        Zone zone0 = zones.find("default");
+        if (zone0 == null) {
+        	zone0= new Zone("default", new Location(loc, loc));
+            zones.save(zone0);
+        }
+        
+        Set<Lamp> lamps = zone1.getLamps();
+        for (Lamp lamp : lamps) {
+			lamp.setZone(zone0);
+			this.lamps.save(lamp);
+		}
+        
+    }
+    
+    private void listZones() throws Exception{
+        List<Zone> list = zones.listAll();
 
-        for (Place place: list) {
-        	Location location= place.getLocation();
-        	System.out.println(place.getName() + " location: (" +location.getX()+","+location.getY() +")");
-        	Set<Lamp> lamps = place.getLamps();
+        for (Zone zone: list) {
+        	Location location= zone.getLocation();
+        	System.out.println(zone.getName() + " location: (" +location.getX()+","+location.getY() +")");
+        	Set<Lamp> lamps = zone.getLamps();
         	for (Lamp lamp : lamps) {
         		System.out.println(lamp.getName() + " is " + (lamp.isOn()?"on":"off")+"!");
 			}
         }
-    	
+
     }
     private void testParent(ServletRequest request) throws Exception{    	
 		String parentName = request.getParameter("name");
@@ -91,6 +145,7 @@ public class Test1 extends HttpServlet {
         		System.out.println("child id:"+child.id);
 			}
         }
+
     	
     }
 
@@ -118,8 +173,9 @@ public class Test1 extends HttpServlet {
 	        //testLamp();
 	      //testLamps();
 //	      testLamps();
-//			testPlaces2(request); 
-			testParent(request); 
+			testPlaces2(request); 
+			toJason();
+//			testParent(request); 
 	        
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
