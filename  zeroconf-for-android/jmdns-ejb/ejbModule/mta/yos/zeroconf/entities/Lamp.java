@@ -25,23 +25,25 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 @Entity
-//@IdClass(LampKey.class)
 public class Lamp implements Serializable{
 	private static final long serialVersionUID = 1974238629718666354L;
 	@Id @Column(nullable=false)
+    private String id;
+	@Column(nullable=false)
     private String name;
-    private int state;
-    //@Id
-    @ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.ALL) 
-	//@JoinColumn(name="place", referencedColumnName="lamps_place")
-    private Place place;
+    private int state;    
+    @ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.REFRESH) @JsonIgnore
+    private Zone zone;
     
     public Lamp(){
     }
     
-    public Lamp(String name, boolean on) {
-		this.name = name;
+    public Lamp(String id, String name, boolean on) {
+		this.id=id;
+    	this.name = name;
 		setOn(on);
 	}
 
@@ -62,19 +64,32 @@ public class Lamp implements Serializable{
 	public int getState() {
 		return state;
 	}
+	@JsonIgnore
 	public void setOn(boolean on){
 		this.state = (on?1:0);
 	}
+	@JsonIgnore
     public boolean isOn(){
     	return state==1;
     }
     
-    public Place getPlace() {
-		return place;
+
+	public void setId(String id) {
+		this.id = id;
 	}
-    public void setPlace(Place place) {
-		this.place = place;
+
+	public String getId() {
+		return id;
+	}
+
+	@JsonIgnore
+	public void setZone(Zone zone) {
+		this.zone = zone;
 	}
 	
+	@JsonIgnore
+	public Zone getZone() {
+		return zone;
+	}	
     
 }
