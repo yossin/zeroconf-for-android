@@ -19,4 +19,17 @@
     <servlet-name>Test1</servlet-name>
     <url-pattern>/Test1</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>ZoneList</display-name>
+    <servlet-name>ZoneList</servlet-name>
+    <servlet-class>mta.yos.zeroconf.servlet.ZoneList</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ZoneList</servlet-name>
+    <url-pattern>/ZoneList</url-pattern>
+  </servlet-mapping>
+  <listener>
+    <listener-class>mta.yos.zeroconf.listener.DnsSdListener</listener-class>
+  </listener>
 </web-app>
