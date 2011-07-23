@@ -3,10 +3,15 @@
     <wb-module deploy-name="jmdns-ws">
         <wb-resource deploy-path="/" source-path="/WebContent"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/tests"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/providers"/>
         <dependent-module archiveName="jmdns-ejb.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/jmdns-ejb/jmdns-ejb">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="jackson-all-1.8.3.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/shared-lib/json/jackson-all-1.8.3.jar">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="dns_sd.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/lib/shared-lib/dns-sd/dns_sd.jar">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="jmdns-ws"/>
