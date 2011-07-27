@@ -66,7 +66,7 @@ public class Zone  implements Serializable {
 		devices.add(device);
 	}
 
-
+	
 	public int getState() {
 		// 0 - off
 		// 1 - on
