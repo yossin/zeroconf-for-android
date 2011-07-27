@@ -32,4 +32,24 @@
   <listener>
     <listener-class>mta.yos.zeroconf.listener.DnsSdListener</listener-class>
   </listener>
+  <servlet>
+    <description></description>
+    <display-name>ZoneUpdate</display-name>
+    <servlet-name>ZoneUpdate</servlet-name>
+    <servlet-class>mta.yos.zeroconf.servlet.ZoneUpdate</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ZoneUpdate</servlet-name>
+    <url-pattern>/ZoneUpdate</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>LocationUpdate</display-name>
+    <servlet-name>LocationUpdate</servlet-name>
+    <servlet-class>mta.yos.zeroconf.servlet.LocationUpdate</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LocationUpdate</servlet-name>
+    <url-pattern>/LocationUpdate</url-pattern>
+  </servlet-mapping>
 </web-app>

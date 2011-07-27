@@ -1,6 +1,5 @@
 package mta.yos.zeroconf.listener;
 
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -13,9 +12,8 @@ import javax.servlet.ServletContextListener;
 import mta.yos.zeroconf.devices.DeviceProvider;
 import mta.yos.zeroconf.devices.ProviderFactory;
 import mta.yos.zeroconf.domain.Device;
-import mta.yos.zeroconf.domain.Location;
-import mta.yos.zeroconf.domain.Service;
-import mta.yos.zeroconf.domain.Zone;
+import mta.yos.zeroconf.helpers.AbstractDevicesHelper;
+import mta.yos.zeroconf.helpers.AbstractZoneHelper;
 import mta.yos.zeroconf.session.Devices;
 import mta.yos.zeroconf.session.Zones;
 
@@ -41,110 +39,25 @@ public class DnsSdListener implements ServletContextListener, BrowseListener {
 	@EJB
 	Zones zones;
 	
-	private class ZoneHelper{
-		private Zone find(String name){
-			try {
-				return zones.find(name);
-			} catch (Exception e){
-				logger.throwing(ZoneHelper.class.getName(), "find", e);
-			}
-			return null;
-		}
-		
-		private Zone create(String name){
-			Zone zone = new Zone();
-			zone.setName(name);
-			zone.setLocation(new Location(0,0));
-			try {
-				zones.save(zone);
-				return zone;
-			} catch (Exception e){
-				logger.throwing(ZoneHelper.class.getName(), "save", e);
-			}
-			return null;
-		}
-		
-		public Zone getDefault(){
-			String name="default";
-			Zone zone = find(name);
-			if (zone == null){
-				zone = create(name);
-			}
-			return zone;
-		}
-	}
-
-	private class DevicesHelper{
-		Logger logger = Logger.getLogger(DevicesHelper.class.getName());
-
-		private Device find(String deviceId){
-			try {
-				return devices.find(deviceId);
-			} catch (Exception e){
-				logger.throwing(DevicesHelper.class.getName(), "find", e);
-			}
-			return null;
-		}
-
-		public void save(Device device) {
-			try {
-				devices.save(device);
-			}catch (Exception e){
-				logger.throwing(Devices.class.getName(), "save", e);
-				logger.severe("unable to save device "+device.getId()+". message: "+ e.getMessage());
-			}
-		}
-		
-		public void update(String deviceId, String deviceName, String serviceId, String hostname, int port, String providerClassName){
-			Device device = find(deviceId);
-			if (device == null){
-				device = new Device();
-				device.setId(deviceId);
-				device.setName(deviceName);
-			}
-			
-			Service service = device.getService();
-			if (service == null) {
-				service = new Service(serviceId);
-				device.setService(service);
-			}
-			Zone zone = device.getZone();
-			if (zone == null){
-				zone = zoneHelper.getDefault();
-				device.setZone(zone);
-			}
-			service.setHostname(hostname);
-			service.setPort(port);
-			service.setProviderClassName(providerClassName);
-			save(device);
-		}
-
-		
-		public void delete(String deviceId){
-			try {
-				devices.delete(deviceId);
-			} catch (Exception e) {
-				logger.severe("unable to delete device ("+deviceId+")");
-				logger.throwing(Devices.class.getName(), "delete", e);
-			}
-		}
-		
-		public List<Device> listAll(){
-			List<Device> deviceList = null;
-			try {
-				deviceList = devices.listAll();
-			} catch (Exception e){
-				logger.throwing(Devices.class.getName(), "listAll", e);
-			}
-			if (deviceList == null){
-				//logger.finer("got null device list - return an empty list");
-				deviceList = new LinkedList<Device>();
-			}
-			return deviceList;
+	private class ZoneHelper extends AbstractZoneHelper{
+		@Override
+		protected Zones getZones() {
+			return zones;
 		}
 	}
 	
+	private class DevicesHelper extends AbstractDevicesHelper{
+		@Override
+		protected Devices getDevices() {
+			return devices;
+		}
+		@Override
+		protected AbstractZoneHelper getZoneHelper() {
+			return zoneHelper;
+		}
+	}
 	
+
 	private class ServiceResolveListener implements ResolveListener{
 		String deviceId;
 		
