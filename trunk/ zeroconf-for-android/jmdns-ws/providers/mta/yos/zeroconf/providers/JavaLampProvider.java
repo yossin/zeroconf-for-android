@@ -26,7 +26,7 @@ public class JavaLampProvider implements DeviceProvider{
 	@Override
 	public int status() {
 		// TODO Auto-generated method stub
-		return 10;
+		return 2;
 	}
 
 }
