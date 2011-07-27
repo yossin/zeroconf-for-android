@@ -7,7 +7,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
-import mta.yos.zeroconf.domain.Device;
 import mta.yos.zeroconf.domain.Zone;
 
 @Stateless(name = "Zones")
@@ -22,10 +21,11 @@ public class ZonesImpl implements Zones {
     }
 	@Override
 	public void save(Zone entity) throws Exception{
-		if (entityManager.contains(entity)){
-			entityManager.refresh(entity);
-		}else {
+		Zone entity1 = find(entity.getName());
+		if (entity1 == null){
 			entityManager.persist(entity);
+		} else {
+			entityManager.merge(entity);
 		}
 	}
 	@Override
