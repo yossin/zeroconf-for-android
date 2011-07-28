@@ -79,7 +79,9 @@ public class Listener extends Thread{
 		try {
 			socket = bind();
 			try {
-				clientConversation(socket.accept());
+				while (isInterrupted() == false){
+					clientConversation(socket.accept());
+				}
 			} catch (IOException ee){
 			}
 		} catch (IOException e) {
