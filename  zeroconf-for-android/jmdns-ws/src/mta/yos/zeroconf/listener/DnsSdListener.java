@@ -90,10 +90,8 @@ public class DnsSdListener implements ServletContextListener, BrowseListener {
 				DeviceProvider provider = factory.create(device);
 				return provider.status();
 			} catch (Exception e) {
-				logger.throwing(CheckServiceTask.class.getName(), "checkState", e);
-
+				return 2;
 			}
-			return 3;
 		}
 		
 		@Override
