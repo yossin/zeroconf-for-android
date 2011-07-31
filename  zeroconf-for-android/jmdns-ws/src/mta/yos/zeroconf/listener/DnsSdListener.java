@@ -13,8 +13,10 @@ import mta.yos.zeroconf.devices.DeviceProvider;
 import mta.yos.zeroconf.devices.ProviderFactory;
 import mta.yos.zeroconf.domain.Device;
 import mta.yos.zeroconf.helpers.AbstractDevicesHelper;
+import mta.yos.zeroconf.helpers.AbstractServicesHelper;
 import mta.yos.zeroconf.helpers.AbstractZoneHelper;
 import mta.yos.zeroconf.session.Devices;
+import mta.yos.zeroconf.session.Services;
 import mta.yos.zeroconf.session.Zones;
 
 import com.apple.dnssd.BrowseListener;
@@ -33,17 +35,28 @@ public class DnsSdListener implements ServletContextListener, BrowseListener {
 	Timer timer = new Timer();
 	DNSSDService browser;
 	DevicesHelper devicesHelper;
+	ServicesHelper servicesHelper;
 	ZoneHelper zoneHelper;
 	@EJB
 	Devices devices;
 	@EJB
 	Zones zones;
+	@EJB
+	Services services;
 	
 	private class ZoneHelper extends AbstractZoneHelper{
 		@Override
 		protected Zones getZones() {
 			return zones;
 		}
+	}
+	
+	private class ServicesHelper extends AbstractServicesHelper{
+
+		@Override
+		protected Services getServices() {
+			return services;
+		}		
 	}
 	
 	private class DevicesHelper extends AbstractDevicesHelper{
@@ -54,6 +67,11 @@ public class DnsSdListener implements ServletContextListener, BrowseListener {
 		@Override
 		protected AbstractZoneHelper getZoneHelper() {
 			return zoneHelper;
+		}
+		@Override
+		protected AbstractServicesHelper getServicesHelper() {
+			// TODO Auto-generated method stub
+			return servicesHelper;
 		}
 	}
 	
@@ -77,7 +95,9 @@ public class DnsSdListener implements ServletContextListener, BrowseListener {
 					", name="+fullName+", hostName="+hostname+", port="+port+", txtRecord="+txtRecord);
 			String deviceName = txtRecord.getValueAsString("deviceName");
 			String providerClassName = txtRecord.getValueAsString("providerClassName");
-			devicesHelper.update(deviceId,deviceName, fullName, hostname, port, providerClassName);
+			String serialNumber= txtRecord.getValueAsString("serialNumber");
+			
+			devicesHelper.update(deviceName, serialNumber, hostname, port, providerClassName);
 			resolver.stop();
 		}
 	}
@@ -130,6 +150,7 @@ public class DnsSdListener implements ServletContextListener, BrowseListener {
     public void contextInitialized(ServletContextEvent context){
     	devicesHelper = new DevicesHelper();
     	zoneHelper = new ZoneHelper();
+    	servicesHelper = new ServicesHelper();
 		initBrowser();
 		initTimer();
     }
@@ -142,6 +163,7 @@ public class DnsSdListener implements ServletContextListener, BrowseListener {
     	timer.cancel();
     	devicesHelper = null;
     	zoneHelper = null;
+    	servicesHelper=null;
     }
 
 	@Override
