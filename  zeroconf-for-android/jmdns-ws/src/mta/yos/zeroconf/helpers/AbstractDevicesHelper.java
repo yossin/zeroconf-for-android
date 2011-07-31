@@ -13,6 +13,7 @@ public abstract class AbstractDevicesHelper{
 	Logger logger = Logger.getLogger(AbstractDevicesHelper.class.getName());
 	protected abstract Devices getDevices();
 	protected abstract AbstractZoneHelper getZoneHelper();
+	protected abstract AbstractServicesHelper getServicesHelper();
 	private Device find(String deviceId){
 		try {
 			return getDevices().find(deviceId);
@@ -31,17 +32,17 @@ public abstract class AbstractDevicesHelper{
 		}
 	}
 	
-	public void update(String deviceId, String deviceName, String serviceId, String hostname, int port, String providerClassName){
-		Device device = find(deviceId);
+	public void update(String deviceName, String serviceId, String hostname, int port, String providerClassName){
+		Device device = find(serviceId);
 		if (device == null){
 			device = new Device();
-			device.setId(deviceId);
+			device.setId(serviceId);
 			device.setName(deviceName);
 		}
 		
 		Service service = device.getService();
 		if (service == null) {
-			service = new Service(serviceId);
+			service = getServicesHelper().update(serviceId, hostname, port, providerClassName);
 			device.setService(service);
 		}
 		Zone zone = device.getZone();
@@ -49,9 +50,6 @@ public abstract class AbstractDevicesHelper{
 			zone = getZoneHelper().getDefault();
 			device.setZone(zone);
 		}
-		service.setHostname(hostname);
-		service.setPort(port);
-		service.setProviderClassName(providerClassName);
 		save(device);
 	}
 
