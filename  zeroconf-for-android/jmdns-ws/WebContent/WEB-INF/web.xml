@@ -11,16 +11,6 @@
   </welcome-file-list>
   <servlet>
     <description></description>
-    <display-name>Test1</display-name>
-    <servlet-name>Test1</servlet-name>
-    <servlet-class>tests.Test1</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Test1</servlet-name>
-    <url-pattern>/Test1</url-pattern>
-  </servlet-mapping>
-  <servlet>
-    <description></description>
     <display-name>ZoneList</display-name>
     <servlet-name>ZoneList</servlet-name>
     <servlet-class>mta.yos.zeroconf.servlet.ZoneList</servlet-class>
