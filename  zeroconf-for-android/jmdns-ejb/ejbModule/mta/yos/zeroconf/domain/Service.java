@@ -12,6 +12,7 @@ public class Service implements Serializable{
 	private static final long serialVersionUID = 816277132910932929L;
 	@Id @Column(nullable=false)
     private String id;
+    private String name;
 	private String hostname;
 	private String textRecord;
 	private int port;
@@ -63,6 +64,14 @@ public class Service implements Serializable{
 
 	public String getProviderClassName() {
 		return providerClassName;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
 	}
 
     

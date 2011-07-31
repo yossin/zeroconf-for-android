@@ -19,6 +19,13 @@ public class ServicesImpl implements Services {
     public Service find(String key) throws Exception {
     	return entityManager.find(Service.class, key);
     }
+
+	@Override
+    public List<Service> findByName(String name) throws Exception {
+    	String q="SELECT o from Service as o where o.name="+name;
+        return query(q);
+    }
+
 	@Override
 	public void save(Service entity) throws Exception{
 		Service entity1 = find(entity.getId());
@@ -34,6 +41,16 @@ public class ServicesImpl implements Services {
 		if (entity == null) return;
 		entityManager.remove(entity);
 	}
+
+	@Override
+	public void deleteByName(String name) throws Exception {
+		List<Service> services = findByName(name);
+		if (services == null) return;
+		for (Service service : services) {
+			entityManager.remove(service);
+		}
+	}
+
 	@Override
 	public List<Service> listAll() throws Exception{
     	String q="SELECT o from Service as o";
