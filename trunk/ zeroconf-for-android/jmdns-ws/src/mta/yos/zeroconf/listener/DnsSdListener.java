@@ -1,5 +1,6 @@
 package mta.yos.zeroconf.listener;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -12,12 +13,8 @@ import javax.servlet.ServletContextListener;
 import mta.yos.zeroconf.devices.DeviceProvider;
 import mta.yos.zeroconf.devices.ProviderFactory;
 import mta.yos.zeroconf.domain.Device;
-import mta.yos.zeroconf.helpers.AbstractDevicesHelper;
-import mta.yos.zeroconf.helpers.AbstractServicesHelper;
-import mta.yos.zeroconf.helpers.AbstractZoneHelper;
+import mta.yos.zeroconf.session.DeviceManager;
 import mta.yos.zeroconf.session.Devices;
-import mta.yos.zeroconf.session.Services;
-import mta.yos.zeroconf.session.Zones;
 
 import com.apple.dnssd.BrowseListener;
 import com.apple.dnssd.DNSSD;
@@ -34,47 +31,55 @@ public class DnsSdListener implements ServletContextListener, BrowseListener {
 	Logger logger = Logger.getLogger(DnsSdListener.class.getName());
 	Timer timer = new Timer();
 	DNSSDService browser;
-	DevicesHelper devicesHelper;
-	ServicesHelper servicesHelper;
-	ZoneHelper zoneHelper;
+	@EJB
+	DeviceManager deviceManager;
+	DeviceManagerHelper helper;
 	@EJB
 	Devices devices;
-	@EJB
-	Zones zones;
-	@EJB
-	Services services;
 	
-	private class ZoneHelper extends AbstractZoneHelper{
-		@Override
-		protected Zones getZones() {
-			return zones;
+	
+	
+	private class DeviceManagerHelper {
+		Logger logger = Logger.getLogger(DeviceManagerHelper.class.getName());
+		public void updateDevice(String deviceName, String serviceId, String serviceName,
+				String hostname, int port, String providerClassName){
+			try {
+				deviceManager.updateDevice(deviceName, serviceId, serviceName, hostname, port, providerClassName);
+			} catch (Exception e){
+				logger.throwing(DeviceManager.class.getName(), "update", e);
+				logger.severe("unable to update device "+serviceId+". message: "+ e.getMessage());
+			}
 		}
-	}
-	
-	private class ServicesHelper extends AbstractServicesHelper{
 
-		@Override
-		protected Services getServices() {
-			return services;
-		}		
+		public void deleteService(String serviceName){
+			try {
+				deviceManager.deleteServiceByName(serviceName);
+			} catch (Exception e){
+				logger.throwing(DeviceManager.class.getName(), "deleteServiceByName", e);
+				logger.severe("unable to delete service "+serviceName+". message: "+ e.getMessage());
+			}
+		}
+		
+		public List<Device> deviceList(){
+			try {
+				return deviceManager.deviceList();
+			} catch (Exception e){
+				logger.throwing(DeviceManager.class.getName(), "deviceList", e);
+				return new LinkedList<Device>();
+			}
+		}
+
+		public void save(Device device){
+			try {
+				devices.save(device);
+			} catch (Exception e){
+				logger.throwing(Devices.class.getName(), "save", e);
+				logger.severe("unable to update device "+device.getId()+". message: "+ e.getMessage());
+			}
+		}
+		
 	}
-	
-	private class DevicesHelper extends AbstractDevicesHelper{
-		@Override
-		protected Devices getDevices() {
-			return devices;
-		}
-		@Override
-		protected AbstractZoneHelper getZoneHelper() {
-			return zoneHelper;
-		}
-		@Override
-		protected AbstractServicesHelper getServicesHelper() {
-			// TODO Auto-generated method stub
-			return servicesHelper;
-		}
-	}
-	
+		
 
 	private class ServiceResolveListener implements ResolveListener{
 		String deviceId;
@@ -97,7 +102,7 @@ public class DnsSdListener implements ServletContextListener, BrowseListener {
 			String providerClassName = txtRecord.getValueAsString("providerClassName");
 			String serialNumber= txtRecord.getValueAsString("serialNumber");
 			
-			devicesHelper.update(deviceName, serialNumber, hostname, port, providerClassName);
+			helper.updateDevice(deviceName, serialNumber, fullName, hostname, port, providerClassName);
 			resolver.stop();
 		}
 	}
@@ -116,10 +121,10 @@ public class DnsSdListener implements ServletContextListener, BrowseListener {
 		
 		@Override
 		public void run() {
-			List<Device> deviceList = devicesHelper.listAll();
+			List<Device> deviceList = helper.deviceList();
 			for (Device device : deviceList) {
 				device.setState(checkState(device));
-				devicesHelper.save(device);
+				helper.save(device);
 			}
 		}
 		
@@ -148,9 +153,7 @@ public class DnsSdListener implements ServletContextListener, BrowseListener {
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
     public void contextInitialized(ServletContextEvent context){
-    	devicesHelper = new DevicesHelper();
-    	zoneHelper = new ZoneHelper();
-    	servicesHelper = new ServicesHelper();
+    	helper = new DeviceManagerHelper();
 		initBrowser();
 		initTimer();
     }
@@ -161,9 +164,7 @@ public class DnsSdListener implements ServletContextListener, BrowseListener {
     public void contextDestroyed(ServletContextEvent arg0) {
     	browser.stop();
     	timer.cancel();
-    	devicesHelper = null;
-    	zoneHelper = null;
-    	servicesHelper=null;
+    	helper = null;
     }
 
 	@Override
@@ -186,7 +187,7 @@ public class DnsSdListener implements ServletContextListener, BrowseListener {
 			String serviceName, String regType, String domain) {
 		logger.finer("SERVICE LOST: flags="+flags+", ifFlags="+ifFlags+
 				", name="+serviceName+", type="+regType+", domain="+domain);
-		devicesHelper.delete(serviceName);	
+		helper.deleteService(serviceName);	
 	}
 
 	
