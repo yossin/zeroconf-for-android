@@ -3,7 +3,6 @@
     <wb-module deploy-name="jmdns-ws">
         <wb-resource deploy-path="/" source-path="/WebContent"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/tests"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/providers"/>
         <dependent-module archiveName="jmdns-ejb.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/jmdns-ejb/jmdns-ejb">
             <dependency-type>uses</dependency-type>
