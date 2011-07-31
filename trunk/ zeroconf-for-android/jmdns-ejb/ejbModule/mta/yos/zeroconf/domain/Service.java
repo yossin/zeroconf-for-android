@@ -11,7 +11,7 @@ import javax.persistence.Id;
 public class Service implements Serializable{
 	private static final long serialVersionUID = 816277132910932929L;
 	@Id @Column(nullable=false)
-    private String fullName;
+    private String id;
 	private String hostname;
 	private String textRecord;
 	private int port;
@@ -20,8 +20,8 @@ public class Service implements Serializable{
     public Service(){
     }
     
-    public Service(String fullName) {
-		this.setFullName(fullName);
+    public Service(String id) {
+		this.setId(id);
 	}
 
 
@@ -49,12 +49,12 @@ public class Service implements Serializable{
 		return port;
 	}
 
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
+	public void setId(String id) {
+		this.id = id;
 	}
 
-	public String getFullName() {
-		return fullName;
+	public String getId() {
+		return id;
 	}
 
 	public void setProviderClassName(String providerClassName) {
