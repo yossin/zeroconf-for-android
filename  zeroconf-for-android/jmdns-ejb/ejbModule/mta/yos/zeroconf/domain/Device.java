@@ -44,7 +44,7 @@ public class Device implements Serializable{
     @ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.REFRESH) @JsonIgnore
     private Zone zone;
 
-    @MapsId @OneToOne(fetch=FetchType.EAGER,cascade=CascadeType.ALL) @JsonIgnore
+    @MapsId @OneToOne(fetch=FetchType.EAGER,cascade=CascadeType.MERGE, orphanRemoval=false) @JsonIgnore
     private Service service;
     
     public Device(){
