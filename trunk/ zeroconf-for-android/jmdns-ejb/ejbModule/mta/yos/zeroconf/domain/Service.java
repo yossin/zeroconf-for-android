@@ -5,9 +5,11 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 
 
 @Entity
+@NamedQuery(name="Service.findByName", query="SELECT o from Service as o where o.name=:name")
 public class Service implements Serializable{
 	private static final long serialVersionUID = 816277132910932929L;
 	@Id @Column(nullable=false)
