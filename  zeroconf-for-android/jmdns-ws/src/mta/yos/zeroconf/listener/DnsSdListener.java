@@ -187,7 +187,8 @@ public class DnsSdListener implements ServletContextListener, BrowseListener {
 			String serviceName, String regType, String domain) {
 		logger.finer("SERVICE LOST: flags="+flags+", ifFlags="+ifFlags+
 				", name="+serviceName+", type="+regType+", domain="+domain);
-		helper.deleteService(serviceName);	
+		String fullName=serviceName+"."+regType+domain;
+		helper.deleteService(fullName);	
 	}
 
 	
