@@ -22,8 +22,8 @@ public class ServicesImpl implements Services {
 
 	@Override
     public List<Service> findByName(String name) throws Exception {
-    	String q="SELECT o from Service as o where o.name="+name;
-        return query(q);
+		Query query = entityManager.createNamedQuery("Service.findByName").setParameter("name", name);
+		return query.getResultList();
     }
 
 	@Override
@@ -45,7 +45,6 @@ public class ServicesImpl implements Services {
 	@Override
 	public void deleteByName(String name) throws Exception {
 		List<Service> services = findByName(name);
-		if (services == null) return;
 		for (Service service : services) {
 			entityManager.remove(service);
 		}
