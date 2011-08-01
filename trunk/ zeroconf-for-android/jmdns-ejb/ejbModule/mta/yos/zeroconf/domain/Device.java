@@ -26,6 +26,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
@@ -44,7 +45,8 @@ public class Device implements Serializable{
     @ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.REFRESH) @JsonIgnore
     private Zone zone;
 
-    @MapsId @OneToOne(fetch=FetchType.EAGER,cascade=CascadeType.MERGE, orphanRemoval=false) @JsonIgnore
+   // @MapsId @OneToOne(fetch=FetchType.EAGER,cascade=CascadeType.MERGE, orphanRemoval=false, optional=true) @JsonIgnore
+    @OneToOne(fetch=FetchType.EAGER,cascade=CascadeType.MERGE, orphanRemoval=false, optional=true) @PrimaryKeyJoinColumn @JsonIgnore
     private Service service;
     
     public Device(){
