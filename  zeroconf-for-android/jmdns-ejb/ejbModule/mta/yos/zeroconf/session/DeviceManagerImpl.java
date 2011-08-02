@@ -5,6 +5,8 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
+import mta.yos.zeroconf.bean.UpdateDeviceRequest;
+import mta.yos.zeroconf.bean.UpdateServiceRequest;
 import mta.yos.zeroconf.domain.Device;
 import mta.yos.zeroconf.domain.Location;
 import mta.yos.zeroconf.domain.Service;
@@ -22,16 +24,16 @@ public class DeviceManagerImpl implements DeviceManager{
 	
 	
 	@Override
-	public Service updateService(String serviceId, String serviceName, String hostname, int port, String providerClassName) throws Exception{
-		Service service = services.find(serviceId);
+	public Service updateService(UpdateServiceRequest request) throws Exception{
+		Service service = services.find(request.getServiceId());
 		if (service == null){
 			service = new Service();
-			service.setId(serviceId);
+			service.setId(request.getServiceId());
 		}
-		service.setName(serviceName);
-		service.setHostname(hostname);
-		service.setPort(port);
-		service.setProviderClassName(providerClassName);
+		service.setName(request.getServiceName());
+		service.setHostname(request.getHostname());
+		service.setPort(request.getPort());
+		service.setProviderClassName(request.getProviderClassName());
 		services.save(service);
 		return service;
 	}
@@ -39,33 +41,16 @@ public class DeviceManagerImpl implements DeviceManager{
 
 	@Override
 	public void deleteServiceByName(String serviceName) throws Exception{
+		List<Service> serviceList = services.findByName(serviceName);
+		for (Service service : serviceList) {
+			String id = service.getId();
+			Device device = devices.find(id);
+			device.setState(2);
+			devices.save(device);
+		}
 		services.deleteByName(serviceName);
 	}
 
-
-	@Override
-	public Device updateDevice(String deviceName, String serviceId, String serviceName,
-			String hostname, int port, String providerClassName) throws Exception{
-		Device device = devices.find(serviceId);
-		if (device == null){
-			device = new Device();
-			device.setId(serviceId);
-			device.setName(deviceName);
-		}
-		
-		Service service = device.getService();
-		if (service == null) {
-			service = updateService(serviceId, serviceName, hostname, port, providerClassName);
-			device.setService(service);
-		}
-		Zone zone = device.getZone();
-		if (zone == null){
-			zone = getDefaultZone();
-			device.setZone(zone);
-		}
-		devices.save(device);
-		return device;
-	}
 
 	@Override
 	public Zone getDefaultZone() throws Exception{
@@ -90,6 +75,29 @@ public class DeviceManagerImpl implements DeviceManager{
 	@Override
 	public List<Device> deviceList() throws Exception {
 		return devices.listAll();
+	}
+
+
+	@Override
+	public void updateDevice(UpdateDeviceRequest request) throws Exception {
+		Device device = devices.find(request.getServiceId());
+		if (device == null){
+			device = new Device();
+			device.setId(request.getServiceId());
+			device.setName(request.getDeviceName());
+		}
+		
+		Service service = device.getService();
+		if (service == null) {
+			service = updateService(request);
+			device.setService(service);
+		}
+		Zone zone = device.getZone();
+		if (zone == null){
+			zone = getDefaultZone();
+			device.setZone(zone);
+		}
+		devices.save(device);
 	}
 	
 
