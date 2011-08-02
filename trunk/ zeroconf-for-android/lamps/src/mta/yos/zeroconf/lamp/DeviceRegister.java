@@ -10,10 +10,7 @@ import com.apple.dnssd.TXTRecord;
 class DeviceRegister {
 	
 	final static String type="_device._tcp";
-	int basePort;
-	String name;
-	String serialNumber;
-	String providerClassName;
+	LampInfo info;
 
 	public static class Listener implements RegisterListener{
 		
@@ -33,27 +30,24 @@ class DeviceRegister {
 	RegisterListener listener = new Listener();
 	DNSSDRegistration registration;
 	
-	public DeviceRegister(String name, String serialNumber, int basePort, String providerClassName) {
-		this.name = name;
-		this.serialNumber = serialNumber;
-		this.basePort= basePort;
-		this.providerClassName = providerClassName;
+	public DeviceRegister(LampInfo info) {
+		this.info= info;
 	}
 
 	private int calculateId(int listenPort){
-		return listenPort-basePort+1;
+		return listenPort-info.getPort()+1;
 	}
 	
 	private TXTRecord createRecord() throws DNSSDException{
 		TXTRecord record = new TXTRecord();
-		record.set("deviceName", name+serialNumber);
-		record.set("providerClassName", providerClassName);
-		record.set("serialNumber", serialNumber);
+		record.set("deviceName", info.getDeviceName());
+		record.set("providerClassName", info.getProvider());
+		record.set("serialNumber", info.getSerialNumber());
 		return record;
 	}
 	public void register(int listenPort) throws Exception{
 		int id = calculateId(listenPort);
-		String serviceName=name+id+"["+serialNumber+"]";
+		String serviceName=info.getName()+id+"["+info.getSerialNumber()+"]";
 		TXTRecord record  = createRecord();
 		int ifIndex=0;
 		int flags=DNSSD.DEFAULT;

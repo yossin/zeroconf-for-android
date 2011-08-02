@@ -4,10 +4,10 @@ package mta.yos.zeroconf.lamp;
 public class SimpleHandler implements LampHandler{
 	Lamp lamp;
 
-	public SimpleHandler(Lamp lamp) {
+	@Override
+	public void setLamp(Lamp lamp) {
 		this.lamp = lamp;
 	}
-
 
 	@Override
 	public String handle(String command) {

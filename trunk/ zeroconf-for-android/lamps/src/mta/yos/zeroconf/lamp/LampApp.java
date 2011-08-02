@@ -1,30 +1,30 @@
 package mta.yos.zeroconf.lamp;
 
-public class LampApp {
+import mta.yos.zeroconf.lamp.Lamp.LampListener;
+
+public class LampApp implements LampListener{
 	LampHandler handler;
 	Listener listener;
 	DeviceRegister register;
-	Lamp lamp;
-	public LampApp(Lamp lamp, String name, String serialNumber, int basePort, String providerClass){
-		this.lamp=lamp;
-		handler = new SimpleHandler(lamp);
-		listener = new Listener(basePort, handler);
-		register = new DeviceRegister(name, serialNumber, basePort, providerClass);
+	public LampApp(LampInfo info){
+		handler = new SimpleHandler();
+		listener = new Listener(info.getPort(), handler);
+		register = new DeviceRegister(info);
 	}
 	
-	public void run() throws Exception{
-		try {
-			start();
-		} finally {
-			stop();
-		}
+	public void setLamp(Lamp lamp){
+		handler.setLamp(lamp);
 	}
-	void start() throws Exception{
+	
+
+	@Override
+	public void onStartup() throws Exception {
 		listener.start();
 		register.register(listener.getListenPort());
-		lamp.display();
 	}
-	void stop(){
+
+	@Override
+	public void onShutdown() {
 		listener.interrupt();
 		register.close();
 	}
