@@ -6,10 +6,19 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.jms.Connection;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageProducer;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.Session;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
+import mta.yos.zeroconf.bean.UpdateDeviceRequest;
 import mta.yos.zeroconf.devices.DeviceProvider;
 import mta.yos.zeroconf.devices.ProviderFactory;
 import mta.yos.zeroconf.domain.Device;
@@ -36,24 +45,71 @@ public class DnsSdListener implements ServletContextListener, BrowseListener {
 	DeviceManagerHelper helper;
 	@EJB
 	Devices devices;
-	
-	
+	@Resource(name="jmdns.QCF")
+	QueueConnectionFactory factory;
+	@Resource(name="jmdns.updateQ")
+	Destination updateQueue;
+	@Resource(name="jmdns.deleteQ")
+	Destination deleteQueue;
 	
 	private class DeviceManagerHelper {
-		Logger logger = Logger.getLogger(DeviceManagerHelper.class.getName());
-		public void updateDevice(String deviceName, String serviceId, String serviceName,
-				String hostname, int port, String providerClassName){
+		final Logger logger = Logger.getLogger(DeviceManagerHelper.class.getName());
+		private void send(UpdateDeviceRequest request, Destination queue) throws JMSException{
+			Connection connection=null;
+			Session session = null;
 			try {
-				deviceManager.updateDevice(deviceName, serviceId, serviceName, hostname, port, providerClassName);
+				connection = factory.createConnection();
+				session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+				Message message = session.createObjectMessage(request);
+				MessageProducer producer = session.createProducer(queue);
+				producer.send(message);
+			} finally {
+				close(connection);
+				close(session);
+			}
+		}
+		private void send(String text, Destination queue) throws JMSException{
+			Connection connection=null;
+			Session session = null;
+			try {
+				connection = factory.createConnection();
+				session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+				Message message = session.createTextMessage(text);
+				MessageProducer producer = session.createProducer(queue);
+				producer.send(message);
+			} finally {
+				close(connection);
+				close(session);
+			}
+		}
+		private void close(Session session) {
+			try {
+				if (session!= null)
+					session.close();
+			} catch (JMSException e) {
+			}
+		}
+		
+		private void close(Connection connection) {
+				try {
+					if (connection!= null)
+						connection.close();
+				} catch (JMSException e) {
+				}
+		}
+
+		public void updateDevice(UpdateDeviceRequest request){
+			try {
+				send(request, updateQueue);
 			} catch (Exception e){
 				logger.throwing(DeviceManager.class.getName(), "update", e);
-				logger.severe("unable to update device "+serviceId+". message: "+ e.getMessage());
+				logger.severe("unable to update device "+request.getServiceId()+". message: "+ e.getMessage());
 			}
 		}
 
 		public void deleteService(String serviceName){
 			try {
-				deviceManager.deleteServiceByName(serviceName);
+				send(serviceName, deleteQueue);
 			} catch (Exception e){
 				logger.throwing(DeviceManager.class.getName(), "deleteServiceByName", e);
 				logger.severe("unable to delete service "+serviceName+". message: "+ e.getMessage());
@@ -102,7 +158,8 @@ public class DnsSdListener implements ServletContextListener, BrowseListener {
 			String providerClassName = txtRecord.getValueAsString("providerClassName");
 			String serialNumber= txtRecord.getValueAsString("serialNumber");
 			
-			helper.updateDevice(deviceName, serialNumber, fullName, hostname, port, providerClassName);
+			UpdateDeviceRequest request = new UpdateDeviceRequest(deviceName, serialNumber, fullName, hostname, port, providerClassName);
+			helper.updateDevice(request);
 			resolver.stop();
 		}
 	}
