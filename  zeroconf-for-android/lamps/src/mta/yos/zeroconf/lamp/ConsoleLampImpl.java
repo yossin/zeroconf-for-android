@@ -12,7 +12,7 @@ public class ConsoleLampImpl implements Lamp{
 	
 	@Override
 	public int status() {
-		printStatus();
+		//printStatus();
 		return state;
 	}
 
@@ -35,14 +35,31 @@ public class ConsoleLampImpl implements Lamp{
 	@Override
 	public void display() {
 		System.out.println("press q for exit");
+		status();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		try {
+			listener.onStartup();
 			String line=null;
 			do {
 				System.out.println(">");
 				line = reader.readLine();
+				if (line.toLowerCase().contains("state")){
+					printStatus();
+				} else if (line.toLowerCase().contains("turn on")){
+					turnOn();
+				} else if (line.toLowerCase().contains("turn off")){
+					turnOff();
+				}
 			}while (line.toLowerCase().contains("q") == false);
 		} catch (Exception e){
 		}
+		listener.onShutdown();
+	}
+
+	LampListener listener;
+	@Override
+	public void setListener(LampListener listener) {
+		this.listener=listener;
+		listener.setLamp(this);
 	}
 }
