@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   	android:layout_width="fill_parent" 
+   	android:layout_height="fill_parent"
+	android:background="@drawable/background_color"
+   	android:padding="0px">
+
+	      
+
+
+    <Button 
+      	android:id="@+id/setAddresBtn" 
+      	android:layout_width="wrap_content" 
+  		android:layout_height="wrap_content"
+   		android:layout_alignLeft="@+id/mapview"
+  		android:width="60px"
+  		android:height="50px"
+  		android:drawableTop="@drawable/search"
+	/>
+	
+	<Button 
+      	android:id="@+id/setGPSByMapBtn" 
+      	android:layout_width="wrap_content" 
+  		android:layout_height="wrap_content"
+   		android:layout_toLeftOf="@+id/showGeoPoint"
+  		android:width="60px"
+   		android:height="50px"
+  		android:drawableTop="@drawable/update"
+	/>
+
+	<Button 
+		android:id="@+id/showGeoPoint" 
+	    android:layout_width="wrap_content" 
+   		android:layout_height="wrap_content" 
+  		android:layout_alignRight="@+id/mapview"
+   		android:width="33px"
+   		android:height="50px"
+   		android:text="G" 
+	/>
+
+    <EditText 
+    	android:id="@+id/setAddresTxt"
+    	android:layout_width="fill_parent" 
+  		android:layout_height="wrap_content" 
+	   	android:paddingTop="10px"
+  		android:layout_toRightOf="@+id/setAddresBtn"
+  		android:layout_toLeftOf="@+id/setGPSByMapBtn"
+  		android:height="50px"
+  		android:text="Israel" 
+   	/>
+
+
+	
+
+
+
+		
+	<com.google.android.maps.MapView
+		android:id="@+id/mapview" 
+		android:clickable="true"
+		android:layout_below="@+id/setAddresTxt"
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"
+		android:apiKey="00WzQEZjmMGcJKIMTl36_8ERi8U7U-JPATbMljw" 
+    />
+
+    <Button 
+      	android:id="@+id/setManualUpdate" 
+  		android:layout_below="@+id/mapview" 
+  		android:layout_width="150px" 
+		android:layout_height="55px"
+  		android:drawableTop="@drawable/arrow"
+	/>
+
+    <Button 
+      	android:id="@+id/refrashHome" 
+  		android:layout_toRightOf="@+id/setManualUpdate"
+  		android:layout_width="fill_parent" 
+		android:layout_height="55px"
+  		android:drawableTop="@drawable/update_long"
+	/>
+
+	<ExpandableListView
+		android:id="@+id/ViewManual_ExpandableList" 
+		android:clickable="true"
+		android:layout_below="@+id/setManualUpdate"
+		android:layout_width="fill_parent" 
+		android:layout_height="wrap_content"
+    />
+
+</RelativeLayout>

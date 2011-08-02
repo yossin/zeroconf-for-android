@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HomeRemote</string>
+    <color name="backColor">#F1F1E1</color>
+    <color name="text_color">#0a0a0a</color>
+</resources>

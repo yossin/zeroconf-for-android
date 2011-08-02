@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/viewByGPS"
+        android:title="By GPS" />
+    <item android:id="@+id/viewByMap"
+        android:title="By Map" />
+    <item android:id="@+id/viewManual"
+        android:title="Manual" />
+    <item android:id="@+id/setHostIP"
+        android:title="Set Host IP" />
+<!--         android:icon="@drawable/icon"  /> -->
+</menu>
