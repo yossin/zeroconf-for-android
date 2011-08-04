@@ -1,0 +1,13 @@
+
+cmd -> 
+  1. 	cd C:\Program Files\Java\jdk1.6.0_25\bin
+		run - keytool -genkeypair -alias yosi -keypass android
+		(pass = yosiyosi)
+		this will create C:\Users\Y\.keystore
+  2. 	run - keytool -list -alias yosi -keystore c:\Users\Y\.keystore
+		you will get - Certificate fingerprint (MD5): 90:39:9F:54:EE:67:77:0A:D6:C5:9E:2F:A0:56:38:4E
+  3. 	go to http://code.google.com/android/maps-api-signup.html
+		enter the md5 key and obtain the apiKey
+  4.	put the apiKey at main.xml
+  5.	go to Eclipse->project->Android tools->export signed package->
+		use the C:\Users\Y\.keystore  
