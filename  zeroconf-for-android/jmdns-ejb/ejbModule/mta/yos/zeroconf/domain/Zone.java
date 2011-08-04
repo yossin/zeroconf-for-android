@@ -14,14 +14,16 @@ import javax.persistence.OneToMany;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import com.sun.xml.bind.CycleRecoverable;
+
 @Entity
-public class Zone  implements Serializable {
+public class Zone  implements Serializable,CycleRecoverable {
 
 	private static final long serialVersionUID = 6345655593639832657L;
 	@Id @Column(nullable=false)
     private String name;
     
-	@Embedded @JsonIgnore
+	@Embedded @JsonIgnore 
     private Location location;
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.REFRESH, mappedBy="zone", orphanRemoval=false)
     private Set<Device> devices;
@@ -77,6 +79,13 @@ public class Zone  implements Serializable {
 		}
 		// all on
 		return 1;
+	}
+
+	@Override
+	public Object onCycleDetected(Context arg0) {
+		Zone zone = new Zone();
+		zone.setName(name);
+		return zone;
 	}
 
     

@@ -1,8 +1,12 @@
 package mta.yos.zeroconf.service;
 
+import java.util.List;
+
 import javax.jws.WebService;
 
-@WebService(targetNamespace="http://yos-hp/jmdns-ws/wsdl" )
+import mta.yos.zeroconf.domain.Device;
+
+@WebService
 public interface DeviceManagerService {
-	String hello();
+	List<Device> deviceList() throws Exception;
 }
