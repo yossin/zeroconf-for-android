@@ -24,15 +24,16 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 
+import com.sun.xml.bind.CycleRecoverable;
+
 
 @Entity
-public class Device implements Serializable{
+public class Device implements Serializable, CycleRecoverable{
 	private static final long serialVersionUID = 1974238629718666354L;
 	@Id @Column(nullable=false)
     private String id;
@@ -110,6 +111,16 @@ public class Device implements Serializable{
 	@JsonIgnore
 	public Service getService() {
 		return service;
+	}
+
+	@Override
+	public Object onCycleDetected(Context arg0) {
+		Device device = new Device();
+		device.setId(id);
+		device.setName(name);
+		device.setService(service);
+		device.setState(state);
+		return device;
 	}	
     
 }
