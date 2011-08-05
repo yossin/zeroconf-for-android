@@ -1,16 +1,17 @@
 package mta.yos.zeroconf.lamp;
 
 
-public class ConsoleLamp {
+public class JmdnsSwingLamp {
 
+	
 	public static void main(String[] args) throws Exception {
-		String name="ConsoleLamp";
-		int port=9009;
+		String name="JmdnsSwingLamp";
+		int port=7007;
 		String provider="mta.yos.zeroconf.providers.JavaLampProvider";
-		String serialNumber="123321";
+		String serialNumber="123454321";
 		LampInfo info = new LampInfo(name, port, provider, serialNumber);
-		AppleLampApp app = new AppleLampApp(info);
-		Lamp lamp = new ConsoleLampImpl();
+		BaseLampApp app = new JmdnsLampApp(info);
+		Lamp lamp = new SwingLampImpl();
 		lamp.setListener(app);
 		lamp.display();
 	}
