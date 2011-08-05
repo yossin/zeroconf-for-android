@@ -62,8 +62,10 @@
 		android:layout_below="@+id/setAddresTxt"
 		android:layout_width="fill_parent" 
 		android:layout_height="wrap_content"
-		android:apiKey="00WzQEZjmMGcJKIMTl36_8ERi8U7U-JPATbMljw" 
+		android:apiKey="00WzQEZjmMGcsAZYpp1uygYWz3smDwlhEt6cErg" 
     />
+<!-- release key	android:apiKey="00WzQEZjmMGcsAZYpp1uygYWz3smDwlhEt6cErg"  -->
+<!-- debug   key	android:apiKey="00WzQEZjmMGcJKIMTl36_8ERi8U7U-JPATbMljw"  -->
 
     <Button 
       	android:id="@+id/setManualUpdate" 

@@ -59,6 +59,8 @@ public class ServiceConnector
 		
 		URLConnection connection = groupUpdateUrl.openConnection();
 		connection.setDoOutput(true);
+		connection.setConnectTimeout(1500);
+		connection.setReadTimeout(5000);
 
 		OutputStreamWriter out = new OutputStreamWriter(connection.getOutputStream());
 		out.write("data=" + message);
@@ -87,6 +89,8 @@ public class ServiceConnector
 			sbURL.append("ZoneList");
 			groupsUrl = new URL(sbURL.toString());
 	        URLConnection yc = groupsUrl.openConnection();
+	        yc.setConnectTimeout(1500);
+	        yc.setReadTimeout(5000);
 	        BufferedReader in = new BufferedReader(
 	                                new InputStreamReader(
 	                                yc.getInputStream()));
