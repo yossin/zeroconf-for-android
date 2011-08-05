@@ -22,6 +22,7 @@ import mta.yos.zeroconf.bean.UpdateDeviceRequest;
 import mta.yos.zeroconf.devices.DeviceProvider;
 import mta.yos.zeroconf.devices.ProviderFactory;
 import mta.yos.zeroconf.domain.Device;
+import mta.yos.zeroconf.domain.Service;
 import mta.yos.zeroconf.session.DeviceManager;
 import mta.yos.zeroconf.session.Devices;
 
@@ -169,7 +170,8 @@ public class DnsSdListener implements ServletContextListener, BrowseListener {
 		ProviderFactory factory = new ProviderFactory();
 		private int checkState(Device device){
 			try {
-				DeviceProvider provider = factory.create(device);
+				Service service = device.getService();
+				DeviceProvider provider = factory.create(service.getProviderClassName(), service.getHostname(), service.getPort());
 				return provider.status();
 			} catch (Exception e) {
 				return 2;
@@ -202,7 +204,7 @@ public class DnsSdListener implements ServletContextListener, BrowseListener {
     private void initTimer(){
 		TimerTask task = new CheckServiceTask();
 		long delay=1000;
-		long period=5000;
+		long period=1000;
 		timer.schedule(task, delay, period);
     }
     

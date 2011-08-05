@@ -10,10 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import mta.yos.zeroconf.devices.DeviceProvider;
 import mta.yos.zeroconf.devices.ProviderFactory;
 import mta.yos.zeroconf.domain.Device;
 import mta.yos.zeroconf.domain.Zone;
+import mta.yos.zeroconf.session.DeviceManager;
 import mta.yos.zeroconf.session.Devices;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -29,27 +29,18 @@ public class ZoneUpdate extends HttpServlet {
         super();
     }
 
+	ProviderFactory factory = new ProviderFactory();
 	ObjectMapper mapper = new ObjectMapper();
 	@EJB
 	Devices devices;
+	@EJB
+	DeviceManager manager;
 
-	private void updateStatus(Device device , int requestedState) throws Exception{
-		DeviceProvider provider = factory.create(device);
-		if (requestedState == 0){
-			provider.turnOff();
-		} else if (requestedState == 1){
-			provider.turnOn();
-		}
-	}
 	
-	ProviderFactory factory = new ProviderFactory();
 	private void handleDevice(String id, int requestedState){
 		try {
 			Device device = devices.find(id);
-			int state= device.getState();
-			if (state == requestedState || state==2) return;
-			updateStatus(device, requestedState);
-
+			manager.updateDeviceState(device, requestedState);
 		} catch (Exception e) {
 			log(e.getMessage());
 		}		
