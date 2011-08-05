@@ -26,7 +26,7 @@ public class ZoneList extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-	    	List<Zone> list = zones.listAll();
+	    	List<Zone> list = zones.findDefinedZones();
 	    	mapper.writeValue(response.getWriter(), list);
 		} catch (Exception e){
 			throw new ServletException(e);
