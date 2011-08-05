@@ -288,9 +288,47 @@ public class HomeRemote extends MapActivity
 			GPSLocationChanged(ll);
 	}
 	
+	static GeoPoint CurGeoPoint = null;
 	private void SendGPSPosByMapPos()
 	{
 		GeoPoint geoPoint = m_mapView.getMapCenter();
 		m_contentWapper.SendGPSLocation(geoPoint.getLatitudeE6(), geoPoint.getLongitudeE6());		
+		
+		/* test */
+		if (false && CurGeoPoint != null)
+		{
+			Double dis = new Double(GetDistance(CurGeoPoint, geoPoint));
+//			boolean bOutOfRange = IsOutOfRange(CurGeoPoint, geoPoint, 1500);
+			String Text = "Location changed,\nDistance = " + (dis.intValue() / 1000) + "," + (dis.intValue() % 1000); // +"\nOutOfRange ? " + bOutOfRange;
+			Toast.makeText( this, Text,  Toast.LENGTH_SHORT).show();
+		}
+		CurGeoPoint = geoPoint;
+		/* end test */
 	}
+
+	private boolean IsOutOfRange(GeoPoint g1, GeoPoint g2, int meters)
+	{
+		return GetDistance(g1, g2) > meters;
+	}
+	
+	 public float GetDistance(GeoPoint g1, GeoPoint g2) 
+	 {
+		 float lat1 = (float)g1.getLatitudeE6() / 1000000;
+		 float lng1 = (float)g1.getLongitudeE6() / 1000000;
+		 float lat2 = (float)g2.getLatitudeE6() / 1000000;
+		 float lng2 = (float)g2.getLongitudeE6() / 1000000;
+		 double earthRadius = 3958.75;
+		 double dLat = Math.toRadians(lat2-lat1);
+		 double dLng = Math.toRadians(lng2-lng1);
+		 double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+		            Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+		            Math.sin(dLng/2) * Math.sin(dLng/2);
+		 double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+		 double dist = earthRadius * c;
+		
+		 int meterConversion = 1609;
+		
+		return (float) (dist * meterConversion);
+	}
+	
 }
