@@ -278,6 +278,7 @@ public class HomeRemote extends MapActivity
 			long lo = (long) (loc.getLongitude() * 1000000);
 			m_contentWapper.SendGPSLocation(la, lo);
 			updateMap(loc.getLatitude(), loc.getLongitude());
+//			ShowGeoPoint(new GeoPoint((int)la, (int)lo));
 		}
 	}
 	
@@ -297,7 +298,7 @@ public class HomeRemote extends MapActivity
 		/* test */
 		if (false && CurGeoPoint != null)
 		{
-			Double dis = new Double(GetDistance(CurGeoPoint, geoPoint));
+			Long dis = new Long(GetDistance(CurGeoPoint, geoPoint));
 //			boolean bOutOfRange = IsOutOfRange(CurGeoPoint, geoPoint, 1500);
 			String Text = "Location changed,\nDistance = " + (dis.intValue() / 1000) + "," + (dis.intValue() % 1000); // +"\nOutOfRange ? " + bOutOfRange;
 			Toast.makeText( this, Text,  Toast.LENGTH_SHORT).show();
@@ -311,7 +312,7 @@ public class HomeRemote extends MapActivity
 		return GetDistance(g1, g2) > meters;
 	}
 	
-	 public float GetDistance(GeoPoint g1, GeoPoint g2) 
+	 public long GetDistance(GeoPoint g1, GeoPoint g2) 
 	 {
 		 float lat1 = (float)g1.getLatitudeE6() / 1000000;
 		 float lng1 = (float)g1.getLongitudeE6() / 1000000;
@@ -328,7 +329,7 @@ public class HomeRemote extends MapActivity
 		
 		 int meterConversion = 1609;
 		
-		return (float) (dist * meterConversion);
+		return (long) (dist * meterConversion);
 	}
 	
 }
