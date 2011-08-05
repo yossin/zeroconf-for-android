@@ -7,7 +7,13 @@ import javax.ejb.Stateless;
 import javax.jws.WebService;
 
 import mta.yos.zeroconf.domain.Device;
+import mta.yos.zeroconf.domain.Location;
+import mta.yos.zeroconf.domain.Zone;
+import mta.yos.zeroconf.helper.LocationHelper;
+import mta.yos.zeroconf.session.DeviceLocationRoles;
 import mta.yos.zeroconf.session.DeviceManager;
+import mta.yos.zeroconf.session.Devices;
+import mta.yos.zeroconf.session.Zones;
 
 @Stateless
 @WebService(
@@ -18,10 +24,47 @@ public class DeviceManagerServiceImpl implements DeviceManagerService {
 
 	@EJB
 	DeviceManager manager;
+	@EJB
+	DeviceLocationRoles locationRoles;
+	@EJB
+	Devices devices;
+	@EJB
+	Zones zones;
+	
 	
 	@Override
 	public List<Device> deviceList() throws Exception {
 		return manager.deviceList();
+	}
+
+	@Override
+	public void createZone(Zone zone) throws Exception {
+		Location location = zone.getLocation();
+		//override location (in case location is set to 0,0)
+		location = LocationHelper.createLocation(location);
+		zone.setLocation(location);
+		zones.save(zone);
+		
+	}
+
+	@Override
+	public void assignDeviceToZone(String deviceId, String zoneName)
+			throws Exception {
+		Zone zone = zones.find(zoneName);
+		Device device = devices.find(deviceId);
+		if (zone.getDevices().contains(device)==false){
+			zone.addDevice(device);
+		}
+		devices.save(device);
+		
+	}
+
+	@Override
+	public void updateDeviceRadius(String deviceId, long radius)
+			throws Exception {
+		Device device = devices.find(deviceId);
+		device.setRadius(radius);
+		devices.save(device);
 	}
 
 }

@@ -44,5 +44,10 @@ public class ZonesImpl implements Zones {
         Query query = entityManager.createQuery(statement);
         return query.getResultList();
 	}
+	@Override
+	public List<Zone> findDefinedZones() throws Exception {
+        Query query = entityManager.createNamedQuery("Zone.findDefinedZones");
+        return query.getResultList();
+	}
 	
 }
