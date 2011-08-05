@@ -10,6 +10,7 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
@@ -17,6 +18,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import com.sun.xml.bind.CycleRecoverable;
 
 @Entity
+@NamedQuery(name="Zone.findDefinedZones", query="SELECT o from Zone as o where o.name!='default'")
 public class Zone  implements Serializable,CycleRecoverable {
 
 	private static final long serialVersionUID = 6345655593639832657L;

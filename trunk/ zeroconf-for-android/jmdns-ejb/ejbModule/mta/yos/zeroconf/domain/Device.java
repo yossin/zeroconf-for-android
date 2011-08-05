@@ -46,6 +46,12 @@ public class Device implements Serializable, CycleRecoverable{
     @ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.REFRESH) @JsonIgnore
     private Zone zone;
 
+    @JsonIgnore
+    private Long radius;
+    
+    @ManyToOne(fetch=FetchType.EAGER,cascade=CascadeType.REFRESH) @JsonIgnore
+    private DeviceLocationRole locationRole;
+
    // @MapsId @OneToOne(fetch=FetchType.EAGER,cascade=CascadeType.MERGE, orphanRemoval=false, optional=true) @JsonIgnore
     @OneToOne(fetch=FetchType.EAGER,cascade=CascadeType.MERGE, orphanRemoval=false, optional=true) @PrimaryKeyJoinColumn @JsonIgnore
     private Service service;
@@ -121,6 +127,25 @@ public class Device implements Serializable, CycleRecoverable{
 		device.setService(service);
 		device.setState(state);
 		return device;
+	}
+	@JsonIgnore
+	public void setLocationRole(DeviceLocationRole locationRole) {
+		this.locationRole = locationRole;
+	}
+
+	@JsonIgnore
+	public DeviceLocationRole getLocationRole() {
+		return locationRole;
+	}
+
+    @JsonIgnore
+	public void setRadius(Long radius) {
+		this.radius = radius;
+	}
+
+    @JsonIgnore
+	public Long getRadius() {
+		return radius;
 	}	
     
 }
