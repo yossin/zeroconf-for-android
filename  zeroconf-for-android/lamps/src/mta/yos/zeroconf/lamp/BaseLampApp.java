@@ -2,14 +2,14 @@ package mta.yos.zeroconf.lamp;
 
 import mta.yos.zeroconf.lamp.Lamp.LampListener;
 
-public class LampApp implements LampListener{
+public abstract class BaseLampApp implements LampListener{
 	LampHandler handler;
 	Listener listener;
 	DeviceRegister register;
-	public LampApp(LampInfo info){
+	protected BaseLampApp(LampInfo info, DeviceRegister register){
 		handler = new SimpleHandler();
 		listener = new Listener(info.getPort(), handler);
-		register = new DeviceRegister(info);
+		this.register = register;
 	}
 	
 	public void setLamp(Lamp lamp){
@@ -26,7 +26,7 @@ public class LampApp implements LampListener{
 	@Override
 	public void onShutdown() {
 		listener.interrupt();
-		register.close();
+		register.unregister();
 	}
 	
 }
