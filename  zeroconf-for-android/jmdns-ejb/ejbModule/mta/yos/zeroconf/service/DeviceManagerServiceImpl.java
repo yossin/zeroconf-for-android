@@ -13,6 +13,7 @@ import mta.yos.zeroconf.helper.LocationHelper;
 import mta.yos.zeroconf.session.DeviceLocationRoles;
 import mta.yos.zeroconf.session.DeviceManager;
 import mta.yos.zeroconf.session.Devices;
+import mta.yos.zeroconf.session.Services;
 import mta.yos.zeroconf.session.Zones;
 
 @Stateless
@@ -28,6 +29,8 @@ public class DeviceManagerServiceImpl implements DeviceManagerService {
 	DeviceLocationRoles locationRoles;
 	@EJB
 	Devices devices;
+	@EJB
+	Services services;
 	@EJB
 	Zones zones;
 	
@@ -52,11 +55,8 @@ public class DeviceManagerServiceImpl implements DeviceManagerService {
 			throws Exception {
 		Zone zone = zones.find(zoneName);
 		Device device = devices.find(deviceId);
-		if (zone.getDevices().contains(device)==false){
-			zone.addDevice(device);
-		}
-		devices.save(device);
-		
+		device.setZone(zone);
+		devices.save(device);		
 	}
 
 	@Override
@@ -65,6 +65,12 @@ public class DeviceManagerServiceImpl implements DeviceManagerService {
 		Device device = devices.find(deviceId);
 		device.setRadius(radius);
 		devices.save(device);
+	}
+
+	@Override
+	public void deleteDevice(String deviceId) throws Exception {
+		services.delete(deviceId);
+		devices.delete(deviceId);
 	}
 
 }
