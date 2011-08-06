@@ -220,7 +220,7 @@ public class HomeRemote extends MapActivity
 	            final EditText inputIP = new EditText(this);
 	            inputIP.setText(m_sHostIP.toString());
 	            alertBuilder.setView(inputIP);
-	            alertBuilder.setMessage("Default body");
+	            alertBuilder.setMessage("Please enter host IP");
 	            alertBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 	                    public void onClick(DialogInterface dialog, int which) {
 	                        dialog.dismiss();
