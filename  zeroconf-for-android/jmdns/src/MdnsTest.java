@@ -39,6 +39,31 @@ public class MdnsTest extends TestCase{
 		String text="fooooo";
 		jmdns.registerService(ServiceInfo.create(type, name, port, text));
 	}
+	
+
+	
+	public void test3_unregister() throws Exception{
+		
+		
+		System.out.println("Host: " + jmdns.getHostName() );
+		System.out.println("Interface: " + jmdns.getInterface() );
+		String type="_device._tcp.local.";
+		String name="AndroidLamp1[123329]";
+		
+		ServiceInfo info = jmdns.getServiceInfo(type, name);
+		
+		ServiceInfo[] list1 = jmdns.list(type);
+		for (int i = 0; i < list1.length; i++) {
+			System.out.println(list1[i]);
+		}
+		
+
+		jmdns.unregisterService(info);
+		System.out.println("canceled??");
+	}
+
+	
+	
 	public void test2_list() throws Exception{
 		System.out.println("Host: " + jmdns.getHostName() );
 		System.out.println("Interface: " + jmdns.getInterface() );
