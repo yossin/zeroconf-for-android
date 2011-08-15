@@ -126,12 +126,15 @@ public class DnsSdListener implements ServletContextListener, BrowseListener {
 			}
 		}
 
-		public void save(Device device){
+		public void save(String deviceId, int state){
+			Device device;
 			try {
+				device = devices.find(deviceId);
+				device.setState(state);
 				devices.save(device);
 			} catch (Exception e){
 				logger.throwing(Devices.class.getName(), "save", e);
-				logger.severe("unable to update device "+device.getId()+". message: "+ e.getMessage());
+				logger.severe("unable to update device "+deviceId+". message: "+ e.getMessage());
 			}
 		}
 		
@@ -182,8 +185,8 @@ public class DnsSdListener implements ServletContextListener, BrowseListener {
 		public void run() {
 			List<Device> deviceList = helper.deviceList();
 			for (Device device : deviceList) {
-				device.setState(checkState(device));
-				helper.save(device);
+				int state = checkState(device);
+				helper.save(device.getId(), state);
 			}
 		}
 		
