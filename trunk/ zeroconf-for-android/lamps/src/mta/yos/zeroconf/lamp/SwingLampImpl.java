@@ -11,10 +11,17 @@ import javax.swing.JFrame;
 public class SwingLampImpl implements Lamp {
 	
 	private class Listener implements WindowListener{
-
+		boolean shutdown=false;
+		private synchronized void shutdown(){
+			if (shutdown==false){
+				listener.onShutdown();
+				shutdown=true;
+			}
+			
+		}
 		@Override
 		public void windowClosed(WindowEvent e) {
-			listener.onShutdown();
+			shutdown();
 		}
 		@Override
 		public void windowOpened(WindowEvent e) {
@@ -31,6 +38,7 @@ public class SwingLampImpl implements Lamp {
 		}
 		@Override
 		public void windowClosing(WindowEvent e) {
+			shutdown();
 		}
 		@Override
 		public void windowDeactivated(WindowEvent e) {
