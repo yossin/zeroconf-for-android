@@ -9,27 +9,22 @@
 
 namespace mta_yos_zeroconf_lamp {
 
-LampInfo::LampInfo(){
-	LampInfo("",0,"");
-}
-LampInfo::LampInfo(std::string name, int port, std::string serial) {
-	LampInfo::name=name;
-	LampInfo::port=port;
-	LampInfo::serial=serial;
+LampInfo::LampInfo(const std::string &name1, const int &port1, const std::string &serial1)
+	: name(name1), port(port1), serial(serial1){
 }
 
 LampInfo::~LampInfo() {
 }
 
-int LampInfo::getPort(){
+const int& LampInfo::getPort(){
 	return port;
 }
 
-std::string LampInfo::getName(){
+const std::string& LampInfo::getName(){
 	return name;
 }
 
-std::string LampInfo::getSerial(){
+const std::string& LampInfo::getSerial(){
 	return serial;
 }
 

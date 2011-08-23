@@ -9,8 +9,8 @@
 
 namespace mta_yos_zeroconf_lamp {
 
-RegisterationHandler::RegisterationHandler(LampInfo info) {
-	RegisterationHandler::info=info;
+RegisterationHandler::RegisterationHandler(const LampInfo &info1)
+	:info(info1){
 }
 
 RegisterationHandler::~RegisterationHandler() {

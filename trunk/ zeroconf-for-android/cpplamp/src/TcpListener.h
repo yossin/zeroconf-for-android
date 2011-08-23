@@ -23,13 +23,16 @@ namespace mta_yos_zeroconf_lamp {
 
 class TcpListener {
 private:
+	Lamp lamp;
 	LampInfo info;
 	LampHandler handler;
+	int handleRequest(boost::asio::ip::tcp::socket &socket);
 public:
-	TcpListener(LampInfo info, LampHandler handler);
+	TcpListener(const LampInfo &info, LampHandler &handler);
 	virtual ~TcpListener();
 	void startListen();
 };
+
 
 }
 
