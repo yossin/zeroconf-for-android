@@ -8,6 +8,7 @@
 #ifndef LAMPHANDLER_H_
 #define LAMPHANDLER_H_
 #include <iostream>
+#include "Lamp.h"
 
 namespace mta_yos_zeroconf_lamp {
 
@@ -15,12 +16,11 @@ class LampHandler {
 private:
 	int state;
 	void printState();
+	Lamp lamp;
 public:
-	LampHandler();
+	LampHandler(Lamp &lamp1);
 	virtual ~LampHandler();
-	void turnOn();
-	void turnOff();
-	int getState();
+	const int& handle(const std::string &operation);
 };
 
 }

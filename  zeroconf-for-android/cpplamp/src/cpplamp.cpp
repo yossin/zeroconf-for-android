@@ -12,8 +12,9 @@
 using namespace std;
 
 int main() {
+	mta_yos_zeroconf_lamp::Lamp lamp;
 	mta_yos_zeroconf_lamp::LampInfo info("CppLamp", 7008, "123456789");
-	mta_yos_zeroconf_lamp::LampApp app(info);
+	mta_yos_zeroconf_lamp::LampApp app(info, lamp);
 
 	app.run();
 	return 0;

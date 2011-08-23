@@ -14,9 +14,9 @@ namespace mta_yos_zeroconf_lamp {
 
 class RegisterationHandler {
 private:
-	LampInfo info;
+	const LampInfo info;
 public:
-	RegisterationHandler(LampInfo info);
+	RegisterationHandler(const LampInfo &info);
 	virtual ~RegisterationHandler();
 	void registerService();
 };

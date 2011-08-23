@@ -8,33 +8,31 @@
 #include "LampHandler.h"
 
 namespace mta_yos_zeroconf_lamp {
-using namespace std;
 void LampHandler::printState(){
 	if (state==0 ){
-		cout << "Lamp is OFF";
+		std::cout << "Lamp is OFF" << std::endl;
 	}
 	else if (state==1){
-		cout << "Lamp is ON";
+		std::cout << "Lamp is ON" << std::endl;
 	}
 }
 
-LampHandler::LampHandler() {
-	state=0;
-}
+LampHandler::LampHandler(Lamp &lamp1)
+	:lamp(lamp1){}
 
 LampHandler::~LampHandler() {
 }
 
-void LampHandler::turnOff(){
-	state=0;
-	printState();
-}
-void LampHandler::turnOn(){
-	state=1;
-	printState();
-}
-int LampHandler::getState(){
-	return state;
+const int& LampHandler::handle(const std::string &operation){
+	if (operation.compare("turn-on")==0){
+		lamp.turnOn();
+	} else if (operation.compare("turn-off")==0){
+		lamp.turnOff();
+	} else if (operation.compare("state")==0){
+	} else {
+		std::cerr << "unknown operation: " << operation << std::endl;
+	}
+	return lamp.getState();
 }
 
 }
