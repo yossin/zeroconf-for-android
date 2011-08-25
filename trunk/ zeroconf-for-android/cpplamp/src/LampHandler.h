@@ -14,11 +14,10 @@ namespace mta_yos_zeroconf_lamp {
 
 class LampHandler {
 private:
-	int state;
 	void printState();
-	Lamp lamp;
+	Lamp *lamp;
 public:
-	LampHandler(Lamp &lamp1);
+	LampHandler(Lamp *lamp1);
 	virtual ~LampHandler();
 	const int& handle(const std::string &operation);
 };

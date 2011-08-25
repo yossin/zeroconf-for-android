@@ -11,21 +11,22 @@
 #include "LampHandler.h"
 #include "Lamp.h"
 #include "TcpListener.h"
+#include "Publisher.h"
 #include <boost/thread.hpp>
 namespace mta_yos_zeroconf_lamp {
 
 class LampApp {
 private:
-	const LampInfo info;
+	LampInfo info;
 	LampHandler handler;
-	Lamp lamp;
+	Lamp *lamp;
 	TcpListener *listener;
 	boost::thread *listenThread;
 	void ioListen();
 	void tcpListen();
 	bool handleOperation(const std::string &operation);
 public:
-	LampApp(const LampInfo &info, Lamp &lamp1);
+	LampApp(LampInfo &info, Lamp *lamp1);
 	virtual ~LampApp();
 	void run();
 };

@@ -8,8 +8,9 @@
 #include "LampApp.h"
 namespace mta_yos_zeroconf_lamp {
 
-LampApp::LampApp(const LampInfo &info1, Lamp &lamp1)
-	: info(info1), lamp(lamp1), handler(lamp1){
+LampApp::LampApp(LampInfo &info1, Lamp *lamp1)
+	: info(info1), handler(lamp1){
+	lamp=lamp1;
 	listener=NULL;
 	listenThread=NULL;
 	listener = new TcpListener(info, handler);
@@ -45,7 +46,11 @@ bool LampApp::handleOperation(const std::string &operation) {
 
 
 void LampApp::run(){
+	// 1. start tcp listening
 	tcpListen();
+	// 2. publish lamp mdns
+	Publisher publisher = Publisher(info);
+	// 3. listen for IO commands (till we will be asked to quit)
 	ioListen();
 }
 }
