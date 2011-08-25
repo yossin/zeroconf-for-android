@@ -1,0 +1,2 @@
+serviceClass: mta.yos.zeroconf.gwt.client.GreetingService
+path: 33F295C5A88FBBDAAB16BB3CCAC12AFF.gwt.rpc
