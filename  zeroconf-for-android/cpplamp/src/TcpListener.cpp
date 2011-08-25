@@ -26,6 +26,13 @@ int TcpListener::handleRequest(boost::asio::ip::tcp::socket &socket) {
 	return handler.handle(operation);
 }
 
+void TcpListener::handleResponse(boost::asio::ip::tcp::socket &socket, const int &state) {
+	boost::asio::streambuf buffer;
+	std::ostream os(&buffer);
+	os << state;
+	boost::asio::write(socket,buffer);
+}
+
 
 void TcpListener::startListen() {
 		boost::asio::io_service io_service;
@@ -37,7 +44,8 @@ void TcpListener::startListen() {
 		while (true) {
 			try {
 				acceptor.accept(socket);
-				handleRequest(socket);
+				int state = handleRequest(socket);
+				handleResponse(socket, state);
 				socket.close();
 			} catch (std::exception& e) {
 				socket.close();

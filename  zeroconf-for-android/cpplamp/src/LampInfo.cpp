@@ -9,8 +9,9 @@
 
 namespace mta_yos_zeroconf_lamp {
 
-LampInfo::LampInfo(const std::string &name1, const int &port1, const std::string &serial1)
-	: name(name1), port(port1), serial(serial1){
+LampInfo::LampInfo(const std::string &deviceName1, const int &port1, const std::string &serialNumber1)
+	: deviceName(deviceName1), port(port1), serialNumber(serialNumber1){
+	serviceName=deviceName1+"["+serialNumber1+"]";
 }
 
 LampInfo::~LampInfo() {
@@ -20,12 +21,23 @@ const int& LampInfo::getPort(){
 	return port;
 }
 
-const std::string& LampInfo::getName(){
-	return name;
+void LampInfo::setServiceName(const std::string& serviceName1){
+	serviceName=serviceName1;
 }
 
-const std::string& LampInfo::getSerial(){
-	return serial;
+const std::string& LampInfo::getServiceName(){
+	return serviceName;
+}
+
+const std::string& LampInfo::getDeviceName(){
+	return deviceName;
+}
+const std::string& LampInfo::getProviderClassName(){
+	return providerClassName;
+}
+
+const std::string& LampInfo::getSerialNumber(){
+	return serialNumber;
 }
 
 }

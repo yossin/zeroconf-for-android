@@ -11,15 +11,21 @@ namespace mta_yos_zeroconf_lamp {
 
 class LampInfo {
 private:
-	const std::string name;
 	const int port;
-	const std::string serial;
+	const std::string deviceName;
+	const std::string providerClassName;
+	const std::string serialNumber;
+	std::string serviceName;
 public:
 	LampInfo(const std::string &name, const int &port, const std::string &serial);
 	virtual ~LampInfo();
 	const int& getPort();
-	const std::string& getSerial();
-	const std::string& getName();
+	const std::string& getSerialNumber();
+	const std::string& getServiceName();
+	const std::string& getDeviceName();
+	const std::string& getProviderClassName();
+	void setServiceName(const std::string& name1);
+
 };
 
 }

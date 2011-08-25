@@ -27,6 +27,7 @@ private:
 	LampInfo info;
 	LampHandler handler;
 	int handleRequest(boost::asio::ip::tcp::socket &socket);
+	void handleResponse(boost::asio::ip::tcp::socket &socket, const int &state);
 public:
 	TcpListener(const LampInfo &info, LampHandler &handler);
 	virtual ~TcpListener();
