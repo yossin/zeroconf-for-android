@@ -1,0 +1,1 @@
+This is an Academic Project for MTA Collage (Israel, Tel-Aviv). Project's GOAL: Create a simple android-application for managing devices (electronic devices like lamps) via zero configuration networking.
